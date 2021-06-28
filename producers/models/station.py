@@ -57,7 +57,7 @@ class Station(Producer):
                 "train_status": train.status.name,
                 "prev_station_id": prev_station_id,
                 "prev_direction": prev_direction
-            },
+            }
         )
 
     def __str__(self):
