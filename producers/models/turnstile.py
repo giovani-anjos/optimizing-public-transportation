@@ -30,7 +30,7 @@ class Turnstile(Producer):
         super().__init__(
             topic_name="org.chicago.cta.turnstile",
             key_schema=Turnstile.key_schema,
-            value_schema=Turnstile.value_schema)
+            value_schema=Turnstile.value_schema
         )
         self.station = station
         self.turnstile_hardware = TurnstileHardware(station)
