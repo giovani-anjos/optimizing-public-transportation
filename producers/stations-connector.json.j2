@@ -1,0 +1,19 @@
+{
+    "name": "{{ name }}",
+    "config": {
+        "connector.class": "{{ connector_class }}",
+        "key.converter": "{{ key_converter }}",
+        "key.converter.schemas.enable": {{ key_converter_schemas_enable }},
+        "value.converter": "{{ value_converter }}",
+        "value.converter.schemas.enable": {{ value_converter_schemas_enable }},
+        "batch.max.rows": {{ batch_max_rows }},
+        "connection.user": "{{ connection_user }}",
+        "connection.url": "{{ connection_url}}",
+        "connection.password": "{{ connection_password }}",
+        "table.whitelist": "{{ table_whitelist }}",
+        "mode": "{{ mode }}",
+        "incrementing.column.name": "{{ incrementing_column_name }}",
+        "topic.prefix": "{{ topic_prefix }}",
+        "poll.interval.ms": {{ poll_interval_ms }}
+    }
+}
