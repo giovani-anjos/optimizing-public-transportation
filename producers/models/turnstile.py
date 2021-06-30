@@ -12,8 +12,8 @@ logger = logging.getLogger(__name__)
 
 
 class Turnstile(Producer):
-    key_schema = avro.load(f"{Path(__file__).parents[0]}/schemas/turnstile_key.json")
 
+    key_schema = avro.load(f"{Path(__file__).parents[0]}/schemas/turnstile_key.json")
     value_schema = avro.load(f"{Path(__file__).parents[0]}/schemas/turnstile_value.json")
 
     def __init__(self, station):
@@ -26,12 +26,11 @@ class Turnstile(Producer):
             .replace("'", "")
         )
 
-
         super().__init__(
-            topic_name="org.chicago.cta.turnstile",
+            topic_name="org.chicago.cta.turnstile.v1",
             key_schema=Turnstile.key_schema,
-            value_schema=Turnstile.value_schema
-        )
+            value_schema=Turnstile.value_schema)
+
         self.station = station
         self.turnstile_hardware = TurnstileHardware(station)
 

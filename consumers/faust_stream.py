@@ -1,10 +1,14 @@
 """Defines trends calculations for stations"""
+import configparser
 import logging
+from pathlib import Path
 
 import faust
 
 
 logger = logging.getLogger(__name__)
+config = configparser.ConfigParser()
+config.read(f"{Path(__file__).parents[1]}/config.ini")
 
 
 # Faust will ingest records from Kafka in this format
@@ -28,8 +32,9 @@ class TransformedStation(faust.Record):
     order: int
     line: str
 
+
 kafka_broker = config.get('env', 'kafka_bootstrap_servers').split(',')[0].replace('PLAINTEXT', 'kafka')
-app = faust.App("stations-stream", broker="kafka://localhost:9092", store="memory://")
+app = faust.App("stations-stream", broker=kafka_broker, store="memory://")
 topic = app.topic("org.chicago.cta.stations", value_type=Station)
 out_topic = app.topic("org.chicago.cta.stations.table.v1", value_type=TransformedStation, partitions=1)
 

@@ -1,27 +1,28 @@
 """Defines core consumer functionality"""
+import configparser
 import logging
+from pathlib import Path
 
-import confluent_kafka
-from confluent_kafka import Consumer
+from confluent_kafka import Consumer, OFFSET_BEGINNING
 from confluent_kafka.avro import AvroConsumer
-from confluent_kafka.avro.serializer import SerializerError
 from tornado import gen
 
-
 logger = logging.getLogger(__name__)
+config = configparser.ConfigParser()
+config.read(f"{Path(__file__).parents[1]}/config.ini")
 
 
 class KafkaConsumer:
     """Defines the base kafka consumer class"""
 
     def __init__(
-        self,
-        topic_name_pattern,
-        message_handler,
-        is_avro=True,
-        offset_earliest=False,
-        sleep_secs=1.0,
-        consume_timeout=0.1,
+            self,
+            topic_name_pattern,
+            message_handler,
+            is_avro=True,
+            offset_earliest=False,
+            sleep_secs=1.0,
+            consume_timeout=0.1,
     ):
         """Creates a consumer object for asynchronous use"""
         self.topic_name_pattern = topic_name_pattern
@@ -36,16 +37,17 @@ class KafkaConsumer:
         }
 
         if is_avro is True:
-            self.broker_properties["schema.registry.url"] = "http://localhost:8081"
+            self.broker_properties['schema.registry.url'] = config.get('env', 'schema_registry_uri')
             self.consumer = AvroConsumer(config=self.broker_properties)
         else:
             self.consumer = Consumer(self.broker_properties)
-            pass
 
         self.consumer.subscribe([topic_name_pattern], on_assign=self.on_assign)
 
     def on_assign(self, consumer, partitions):
         """Callback for when topic assignment takes place"""
+
+        logger.debug("Consumer on_assign function complete")
         for partition in partitions:
             consumer.seek(partition)
             if self.offset_earliest:
@@ -63,6 +65,7 @@ class KafkaConsumer:
 
     def _consume(self):
         """Polls for a message. Returns 1 if a message was received, 0 otherwise"""
+        logger.debug("Consumer _consume function complete")
         message = self.consumer.poll(timeout=1.0)
         if message is not None:
             try:
@@ -72,7 +75,6 @@ class KafkaConsumer:
                 return 0
         logger.info(message)
         return 1
-
 
     def close(self):
         """Cleans up any open kafka consumers"""
