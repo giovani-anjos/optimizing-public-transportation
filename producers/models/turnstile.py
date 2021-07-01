@@ -27,7 +27,7 @@ class Turnstile(Producer):
         )
 
         super().__init__(
-            topic_name="org.chicago.cta.turnstile.v1",
+            topic_name="org.chicago.cta.turnstile",
             key_schema=Turnstile.key_schema,
             value_schema=Turnstile.value_schema)
 
@@ -44,7 +44,6 @@ class Turnstile(Producer):
                 value={
                     "station_id": self.station.station_id,
                     "station_name": self.station.name,
-                    "line": self.station.color.name,
-                    "entries": int(entry)
+                    "line": self.station.color.name
                 }
             )
