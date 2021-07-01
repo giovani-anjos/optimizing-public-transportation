@@ -10,7 +10,7 @@ import constant
 
 logger = logging.getLogger(__name__)
 config = configparser.ConfigParser()
-config.read(f"{Path(__file__).parents[1]}/config.ini")
+config.read(f"{Path(__file__).parents[0]}/config.ini")
 
 
 def _build_connector():
