@@ -36,10 +36,10 @@ class TransformedStation(faust.Record):
 kafka_broker = config.get('env', 'kafka_bootstrap_servers').split(',')[0].replace('PLAINTEXT', 'kafka')
 app = faust.App("stations-stream", broker=kafka_broker, store="memory://")
 topic = app.topic("org.chicago.cta.stations", value_type=Station)
-out_topic = app.topic("org.chicago.cta.stations.table.v1", value_type=TransformedStation, partitions=1)
+out_topic = app.topic("org.chicago.cta.stations.table", value_type=TransformedStation, partitions=1)
 
 table = app.Table(
-    "stations",
+    "org.chicago.cta.stations.table",
     default=TransformedStation,
     partitions=1,
     changelog_topic=out_topic)

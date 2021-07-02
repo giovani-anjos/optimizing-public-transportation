@@ -20,7 +20,7 @@ CREATE TABLE turnstile (
     station_name VARCHAR,
     line VARCHAR
 ) WITH (
-    KAFKA_TOPIC = 'org.chicago.cta.turnstile.v1',
+    KAFKA_TOPIC = 'org.chicago.cta.turnstile',
     VALUE_FORMAT = 'AVRO',
     KEY = 'station_id'
 );
@@ -34,7 +34,7 @@ WITH (VALUE_FORMAT = 'JSON') AS
 
 def execute_statement():
     """Executes the KSQL statement against the KSQL API"""
-    if topic_check.topic_exists("TURNSTILE_SUMMARY") is True:
+    if topic_check.topic_exists("turnstile_summary") is True:
         logging.info("KSQL tables already exist")
         return
 
